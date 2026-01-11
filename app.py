@@ -52,6 +52,11 @@ with colA:
     plt.title("Histogram")
     st.pyplot(fig)
     plt.close(fig)
+st.caption(
+    "Most countries have a sufficient physical activity level between 60% and 85%. "
+    "However, a noticeable group of countries falls below this range, indicating "
+    "substantial global disparities in physical activity."
+)
 
 with colB:
     fig = plt.figure(figsize=(8, 3))
