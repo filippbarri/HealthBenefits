@@ -65,6 +65,11 @@ with colB:
     plt.title("Boxplot")
     st.pyplot(fig)
     plt.close(fig)
+st.caption(
+    "The boxplot shows a relatively compact distribution of physical activity levels. "
+    "Only a few countries exhibit very low activity levels, while extreme high values "
+    "are rare, suggesting limited statistical outliers."
+)
 
 # Top/Bottom
 st.subheader("Top / Bottom countries")
