@@ -19,6 +19,11 @@ DATA_PATH = "data/insufficient_activity.csv"
 df_raw = load_data(DATA_PATH)
 
 # Sidebar filters
+st.sidebar.markdown(
+    "Use the controls below to explore how physical activity levels "
+    "change across years and between genders."
+)
+
 years = sorted(df_raw["Period"].dropna().unique())
 default_year = 2019 if 2019 in years else years[-1]
 year = st.sidebar.selectbox("Year", years, index=years.index(default_year))
