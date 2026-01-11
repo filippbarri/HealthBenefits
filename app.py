@@ -79,6 +79,40 @@ st.caption(
     "Only a few countries exhibit very low activity levels, while extreme high values "
     "are rare, suggesting limited statistical outliers."
 )
+st.subheader("Heatmap: Activity by Region and Year")
+
+if "ParentLocation" in df_raw.columns:
+    # беремо Both sexes для стабільності порівняння
+    heat_df = (
+        df_raw[df_raw["Dim1"] == "Both sexes"]
+        .groupby(["ParentLocation", "Period"])["FactValueNumeric"]
+        .mean()
+        .reset_index()
+        .rename(columns={
+            "ParentLocation": "region",
+            "Period": "year",
+            "FactValueNumeric": "avg_insufficient_activity"
+        })
+    )
+
+    heat_df["avg_sufficient_activity"] = 100 - heat_df["avg_insufficient_activity"]
+
+    pivot = heat_df.pivot(index="region", columns="year", values="avg_sufficient_activity")
+
+    fig = plt.figure(figsize=(12, 4))
+    sns.heatmap(pivot, annot=False)
+    plt.xlabel("Year")
+    plt.ylabel("Region")
+    plt.title("Average sufficient physical activity (%) by region and year")
+    st.pyplot(fig)
+    plt.close(fig)
+
+    st.caption(
+        "This heatmap shows how average physical activity levels vary across regions over time. "
+        "It helps spot persistent regional differences and long-term trends."
+    )
+else:
+    st.info("Region information (ParentLocation) is not available in this dataset.")
 
 # Top/Bottom
 st.subheader("Top / Bottom countries")
