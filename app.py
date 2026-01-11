@@ -11,7 +11,7 @@ def load_data(path: str) -> pd.DataFrame:
 
 st.title("WHO Physical Activity (Insufficient Activity) — Global EDA")
 st.markdown(
-    "This dashboard explores WHO estimates of *insufficient physical activity among adults (18+)*. "
+    "This dashboard explores WHO (World Health Organization) estimates of *insufficient physical activity among adults (18+)*. "
     "Use the filters to compare years and genders across countries."
 )
 
@@ -77,6 +77,12 @@ st.caption(
 
 # Top/Bottom
 st.subheader("Top / Bottom countries")
+st.markdown(
+    "### Top and bottom countries\n"
+    "The tables below highlight countries with the highest and lowest levels of sufficient "
+    "physical activity, helping identify extreme cases rather than statistical outliers."
+)
+
 colC, colD = st.columns(2)
 with colC:
     st.write("Bottom 10 (lowest sufficient activity)")
