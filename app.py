@@ -83,7 +83,7 @@ st.caption(
 # Top/Bottom
 st.subheader("Top / Bottom countries")
 st.markdown(
-    "### Top and bottom countries\n"
+    # "### Top and bottom countries\n"
     "The tables below highlight countries with the highest and lowest levels of sufficient "
     "physical activity, helping identify extreme cases rather than statistical outliers."
 )
