@@ -10,6 +10,10 @@ def load_data(path: str) -> pd.DataFrame:
     return pd.read_csv(path)
 
 st.title("WHO Physical Activity (Insufficient Activity) — Global EDA")
+st.markdown(
+    "This dashboard explores WHO estimates of *insufficient physical activity among adults (18+)*. "
+    "Use the filters to compare years and genders across countries."
+)
 
 DATA_PATH = "data/insufficient_activity.csv"
 df_raw = load_data(DATA_PATH)
