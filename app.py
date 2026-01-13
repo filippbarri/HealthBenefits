@@ -123,6 +123,61 @@ k = st.slider("Number of clusters (k)", min_value=2, max_value=6, value=3)
 
 kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
 df["cluster"] = kmeans.fit_predict(X_scaled)
+st.markdown("### Countries in each cluster")
+
+# 1) Вибір кластера
+selected_cluster = st.selectbox(
+    "Select cluster to view countries",
+    sorted(df["cluster"].unique())
+)
+
+cluster_df = (
+    df[df["cluster"] == selected_cluster]
+    .sort_values("sufficient_activity", ascending=False)
+    .reset_index(drop=True)
+)
+
+st.write(f"Countries in cluster {selected_cluster}: **{len(cluster_df)}**")
+
+# 2) Таблиця країн в кластері
+st.dataframe(
+    cluster_df[["country", "sufficient_activity", "insufficient_activity"]],
+    use_container_width=True
+)
+
+# 3) Пошук конкретної країни і показ її кластера
+st.markdown("### Find a country")
+country_search = st.selectbox("Choose a country", sorted(df["country"].unique()))
+row = df[df["country"] == country_search].iloc[0]
+
+st.info(
+    f"**{country_search}** → **cluster {int(row['cluster'])}**, "
+    f"**{row['sufficient_activity']:.1f}%** sufficient activity "
+    f"({row['insufficient_activity']:.1f}% insufficient)."
+)
+
+# 4) Top/Bottom всередині кластера — дуже корисно і не перевантажує
+top_n = st.slider("Show top/bottom N within selected cluster", 5, 30, 10)
+
+col1, col2 = st.columns(2)
+with col1:
+    st.write("Top countries in this cluster")
+    st.dataframe(
+        cluster_df.nlargest(top_n, "sufficient_activity")[["country", "sufficient_activity"]],
+        use_container_width=True
+    )
+
+with col2:
+    st.write("Bottom countries in this cluster")
+    st.dataframe(
+        cluster_df.nsmallest(top_n, "sufficient_activity")[["country", "sufficient_activity"]],
+        use_container_width=True
+    )
+
+st.caption(
+    "Use the selector to inspect which countries belong to each cluster. "
+    "This makes clustering results interpretable and directly answers the question about grouping countries."
+)
 
 # Скільки країн у кожному кластері
 cluster_counts = df["cluster"].value_counts().sort_index().reset_index()
