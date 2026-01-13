@@ -49,6 +49,36 @@ c3.metric("Avg sufficient activity (%)", f"{df['sufficient_activity'].mean():.2f
 st.subheader("Preview")
 st.dataframe(df.sort_values("sufficient_activity", ascending=False).head(20), use_container_width=True)
 
+st.subheader("Trend over time (global average)")
+
+# Глобальний тренд по роках для вибраної статі (Both sexes / Male / Female)
+df_trend = (
+    df_raw[df_raw["Dim1"] == sex]
+    .groupby("Period")["FactValueNumeric"]
+    .mean()
+    .reset_index()
+    .rename(columns={
+        "Period": "year",
+        "FactValueNumeric": "avg_insufficient_activity"
+    })
+    .dropna()
+)
+
+df_trend["avg_sufficient_activity"] = 100 - df_trend["avg_insufficient_activity"]
+
+fig = plt.figure(figsize=(10, 4))
+plt.plot(df_trend["year"], df_trend["avg_sufficient_activity"], marker="o")
+plt.xlabel("Year")
+plt.ylabel("Avg sufficient physical activity (%)")
+plt.title("Global trend in physical activity over time")
+st.pyplot(fig)
+plt.close(fig)
+
+st.caption(
+    "This line chart shows how the global average level of physical activity changes over time. "
+    "Use the 'Sex' filter to compare trends for males, females, and both sexes."
+)
+
 # Charts
 st.subheader("Distribution")
 colA, colB = st.columns(2)
