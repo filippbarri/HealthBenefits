@@ -2,6 +2,8 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
 
 st.set_page_config(page_title="WHO Physical Activity — EDA", layout="wide")
 
@@ -109,6 +111,50 @@ st.caption(
     "Only a few countries exhibit very low activity levels, while extreme high values "
     "are rare, suggesting limited statistical outliers."
 )
+st.subheader("Clustering: groups of countries by activity level")
+
+# Кластеризацію робимо на snapshot df (обраний year + sex)
+X = df[["sufficient_activity"]].copy()
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+k = st.slider("Number of clusters (k)", min_value=2, max_value=6, value=3)
+
+kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+df["cluster"] = kmeans.fit_predict(X_scaled)
+
+# Скільки країн у кожному кластері
+cluster_counts = df["cluster"].value_counts().sort_index().reset_index()
+cluster_counts.columns = ["cluster", "countries"]
+
+c1, c2 = st.columns(2)
+with c1:
+    st.write("Countries per cluster")
+    st.dataframe(cluster_counts, use_container_width=True)
+
+with c2:
+    # Центри кластерів у вихідних % (повертаємо scale назад)
+    centers_scaled = kmeans.cluster_centers_
+    centers = scaler.inverse_transform(centers_scaled).flatten()
+    centers_df = pd.DataFrame({"cluster": range(k), "center_sufficient_activity": centers}).sort_values("center_sufficient_activity")
+    st.write("Cluster centers (sufficient activity %)")
+    st.dataframe(centers_df, use_container_width=True)
+
+# Візуалізація: stripplot по кластерах (наочніше для 1 фічі)
+fig = plt.figure(figsize=(10, 4))
+sns.stripplot(data=df, x="cluster", y="sufficient_activity", jitter=0.25)
+plt.xlabel("Cluster")
+plt.ylabel("Sufficient physical activity (%)")
+plt.title("Clusters of countries by physical activity level")
+st.pyplot(fig)
+plt.close(fig)
+
+st.caption(
+    "Clustering groups countries with similar physical activity levels. "
+    "This answers whether we can identify distinct patterns across countries for the selected year and sex."
+)
+
 st.subheader("Heatmap: Activity by Region and Year")
 
 if "ParentLocation" in df_raw.columns:
