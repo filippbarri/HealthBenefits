@@ -48,8 +48,11 @@ c1.metric("Countries", f"{len(df):,}")
 c2.metric("Avg insufficient activity (%)", f"{df['insufficient_activity'].mean():.2f}")
 c3.metric("Avg sufficient activity (%)", f"{df['sufficient_activity'].mean():.2f}")
 
-st.subheader("Preview")
-st.dataframe(df.sort_values("sufficient_activity", ascending=False).head(20), use_container_width=True)
+st.subheader("Preview (sample)")
+st.dataframe(df.sample(20, random_state=42), use_container_width=True)
+
+#st.subheader("Preview")
+#st.dataframe(df.sort_values("sufficient_activity", ascending=False).head(20), use_container_width=True)
 
 st.subheader("Trend over time (global average)")
 
