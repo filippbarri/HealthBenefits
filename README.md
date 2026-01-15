@@ -1,5 +1,5 @@
 # Глобальні патерни фізичної активності населення та їх потенційний вплив на якість життя
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)][(https://healthbenefits-b5ubjbybvk5kes39xobxtd.streamlit.app/#preview)]
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://healthbenefits-b5ubjbybvk5kes39xobxtd.streamlit.app/#preview)
 ### Аналітична мета проєкту
 
 **Метою проєкту** є аналіз глобальних та регіональних відмінностей у рівні фізичної активності дорослого населення та виявлення закономірностей, які можуть бути пов’язані з якістю життя та станом здоров’я.
